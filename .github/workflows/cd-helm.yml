@@ -82,14 +82,7 @@ jobs:
       - name: publish to oci registry
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
-          path=`pwd`
-          find_out=`find .`
-          echo "path=${path}; find=${find_out}"
           helm dependency build charts/kubernetes-dashboard/
           helm package charts/kubernetes-dashboard/
-          path=`pwd`
-          find_out=`find .`
-          echo "path=${path}; find=${find_out}"
           package=`ls -t kubernetes-dashboard*.tgz | head -n 1`
-          echo "found ${package}"
-          # disabled helm push "${package}" oci://${{ env.GCR_IMAGE }}
+          helm push "${package}" oci://${{ env.GCR_IMAGE }}
