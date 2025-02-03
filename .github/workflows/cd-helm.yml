@@ -85,6 +85,7 @@ jobs:
           path=`pwd`
           find_out=`find .`
           echo "path=${path}; find=${find_out}"
+          helm dependency build charts/kubernetes-dashboard/
           helm package charts/kubernetes-dashboard/
           path=`pwd`
           find_out=`find .`
