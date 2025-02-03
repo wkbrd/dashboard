@@ -83,9 +83,8 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
           # helm package ${{ github.workspace }}/
-          contents=`ls *.tgz`
           path=`pwd`
           find_out=`find .`
-          echo "contents=${contents}; path=${path}; find=${find_out}"
+          echo "path=${path}; find=${find_out}"
           package=`ls -t *.tgz | head -n 1`
           # disabled helm push "${package}" oci://${{ env.GCR_IMAGE }}
