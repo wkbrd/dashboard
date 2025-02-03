@@ -79,7 +79,7 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: publish to oci registry
+      - name: Publish to OCI registry
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
           helm dependency build charts/kubernetes-dashboard/
