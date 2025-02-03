@@ -83,5 +83,6 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
           helm package ${{ github.workspace }}/
-          package=`ls -t ${{ github.workspace }}/dashboard-*.tgz | head -n 1`
+          ls *.tgz >&2
+          package=`ls -t *.tgz | head -n 1`
           helm push "${package}" oci://${{ env.GCR_IMAGE }}
