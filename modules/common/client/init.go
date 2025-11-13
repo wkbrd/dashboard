@@ -41,6 +41,7 @@ type configBuilder struct {
 	kubeconfigPath string
 	masterUrl      string
 	insecure       bool
+	caBundlePath   string
 }
 
 func (in *configBuilder) buildBaseConfig() (config *rest.Config, err error) {
@@ -59,6 +60,12 @@ func (in *configBuilder) buildBaseConfig() (config *rest.Config, err error) {
 	}
 
 	config, err = clientcmd.BuildConfigFromFlags(in.masterUrl, in.kubeconfigPath)
+
+	if len(in.caBundlePath) > 0 {
+		klog.InfoS("Using custom CA Bundle", "caBundle", in.caBundlePath)
+		config.TLSClientConfig.CAFile = in.caBundlePath
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +80,7 @@ func (in *configBuilder) setConfigDefaults(config *rest.Config) *rest.Config {
 
 	config.ContentType = DefaultContentType
 	config.UserAgent = DefaultUserAgent + "/" + in.userAgent
-	config.TLSClientConfig.Insecure = in.insecure
+	config.Insecure = in.insecure
 
 	return setConfigRateLimitDefaults(config)
 }
@@ -123,6 +130,12 @@ func WithInsecureTLSSkipVerify(insecure bool) Option {
 	}
 }
 
+func WithCaBundle(caBundlePath string) Option {
+	return func(c *configBuilder) {
+		c.caBundlePath = caBundlePath
+	}
+}
+
 func configFromRequest(request *http.Request) (*rest.Config, error) {
 	authInfo, err := buildAuthInfo(request)
 	if err != nil {
@@ -137,9 +150,9 @@ func buildConfigFromAuthInfo(authInfo *api.AuthInfo) (*rest.Config, error) {
 
 	cmdCfg.Clusters[DefaultCmdConfigName] = &api.Cluster{
 		Server:                   baseConfig.Host,
-		CertificateAuthority:     baseConfig.TLSClientConfig.CAFile,
-		CertificateAuthorityData: baseConfig.TLSClientConfig.CAData,
-		InsecureSkipTLSVerify:    baseConfig.TLSClientConfig.Insecure,
+		CertificateAuthority:     baseConfig.CAFile,
+		CertificateAuthorityData: baseConfig.CAData,
+		InsecureSkipTLSVerify:    baseConfig.Insecure,
 	}
 
 	cmdCfg.AuthInfos[DefaultCmdConfigName] = authInfo

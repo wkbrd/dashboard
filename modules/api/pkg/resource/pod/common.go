@@ -17,6 +17,7 @@ package pod
 import (
 	"fmt"
 
+	"github.com/samber/lo"
 	v1 "k8s.io/api/core/v1"
 
 	metricapi "k8s.io/dashboard/api/pkg/integration/metric/api"
@@ -181,28 +182,28 @@ func getPodStatusPhase(pod v1.Pod, warnings []common.Event) v1.PodPhase {
 
 type PodCell v1.Pod
 
-func (self PodCell) GetProperty(name dataselect.PropertyName) dataselect.ComparableValue {
+func (in PodCell) GetProperty(name dataselect.PropertyName) dataselect.ComparableValue {
 	switch name {
 	case dataselect.NameProperty:
-		return dataselect.StdComparableString(self.ObjectMeta.Name)
+		return dataselect.StdComparableString(in.Name)
 	case dataselect.StatusProperty:
-		return dataselect.StdComparableString(getPodStatus(v1.Pod(self)))
+		return dataselect.StdComparableString(getPodStatus(v1.Pod(in)))
 	case dataselect.CreationTimestampProperty:
-		return dataselect.StdComparableTime(self.ObjectMeta.CreationTimestamp.Time)
+		return dataselect.StdComparableTime(in.CreationTimestamp.Time)
 	case dataselect.NamespaceProperty:
-		return dataselect.StdComparableString(self.ObjectMeta.Namespace)
+		return dataselect.StdComparableString(in.Namespace)
 	default:
 		// if name is not supported then just return a constant dummy value, sort will have no effect.
 		return nil
 	}
 }
 
-func (self PodCell) GetResourceSelector() *metricapi.ResourceSelector {
+func (in PodCell) GetResourceSelector() *metricapi.ResourceSelector {
 	return &metricapi.ResourceSelector{
-		Namespace:    self.ObjectMeta.Namespace,
+		Namespace:    in.Namespace,
 		ResourceType: types.ResourceKindPod,
-		ResourceName: self.ObjectMeta.Name,
-		UID:          self.ObjectMeta.UID,
+		ResourceName: in.Name,
+		UID:          in.UID,
 	}
 }
 
@@ -289,11 +290,11 @@ func maxResourceList(list, new v1.ResourceList) {
 	}
 }
 
-// PodRequestsAndLimits returns a dictionary of all defined resources summed up for all
+// RequestsAndLimits returns a dictionary of all defined resources summed up for all
 // containers of the pod. If pod overhead is non-nil, the pod overhead is added to the
 // total container resource requests and to the total container limits which have a
 // non-zero quantity.
-func PodRequestsAndLimits(pod *v1.Pod) (reqs, limits v1.ResourceList, err error) {
+func RequestsAndLimits(pod *v1.Pod) (reqs, limits v1.ResourceList, err error) {
 	reqs, limits = v1.ResourceList{}, v1.ResourceList{}
 	for _, container := range pod.Spec.Containers {
 		addResourceList(reqs, container.Resources.Requests)
@@ -320,37 +321,47 @@ func PodRequestsAndLimits(pod *v1.Pod) (reqs, limits v1.ResourceList, err error)
 }
 
 func getPodAllocatedResources(pod *v1.Pod) (PodAllocatedResources, error) {
-	reqs, limits, err := PodRequestsAndLimits(pod)
+	reqs, limits, err := RequestsAndLimits(pod)
 	if err != nil {
 		return PodAllocatedResources{}, err
 	}
 
-	for podReqName, podReqValue := range reqs {
-		if value, ok := reqs[podReqName]; !ok {
-			reqs[podReqName] = podReqValue.DeepCopy()
-		} else {
-			value.Add(podReqValue)
-			reqs[podReqName] = value
-		}
-	}
-
-	for podLimitName, podLimitValue := range limits {
-		if value, ok := limits[podLimitName]; !ok {
-			limits[podLimitName] = podLimitValue.DeepCopy()
-		} else {
-			value.Add(podLimitValue)
-			limits[podLimitName] = value
-		}
-	}
-
-	cpuRequests, cpuLimits, memoryRequests, memoryLimits := reqs[v1.ResourceCPU], limits[v1.ResourceCPU], reqs[v1.ResourceMemory], limits[v1.ResourceMemory]
+	cpuRequests := reqs[v1.ResourceCPU]
+	cpuLimits := limits[v1.ResourceCPU]
+	memoryRequests := reqs[v1.ResourceMemory]
+	memoryLimits := limits[v1.ResourceMemory]
 
 	return PodAllocatedResources{
 		CPURequests:    cpuRequests.MilliValue(),
 		CPULimits:      cpuLimits.MilliValue(),
 		MemoryRequests: memoryRequests.Value(),
 		MemoryLimits:   memoryLimits.Value(),
+		GPURequests:    toGPUAllocations(reqs),
+		GPULimits:      toGPUAllocations(limits),
 	}, nil
+}
+
+func toGPUAllocations(resources v1.ResourceList) []GPUAllocation {
+	result := make([]GPUAllocation, 0)
+	for resource, quantity := range resources {
+		if gpuType := ToGPU(string(resource)); gpuType != NoGPU {
+			result = append(result, GPUAllocation{
+				Quantity: quantity.Value(),
+				Type:     gpuType,
+			})
+		}
+	}
+
+	return lo.Reduce(result, func(acc []GPUAllocation, item GPUAllocation, _ int) []GPUAllocation {
+		for i, existing := range acc {
+			if existing.Type == item.Type {
+				acc[i].Quantity += item.Quantity
+				return acc
+			}
+		}
+
+		return append(acc, item)
+	}, []GPUAllocation{})
 }
 
 func isPodInitializedConditionTrue(status *v1.PodStatus) bool {

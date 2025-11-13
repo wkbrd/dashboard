@@ -96,9 +96,6 @@ type NodeDetail struct {
 	// Unschedulable controls node schedulability of new pods. By default node is schedulable.
 	Unschedulable bool `json:"unschedulable"`
 
-	// Set of ids/uuids to uniquely identify the node.
-	NodeInfo v1.NodeSystemInfo `json:"nodeInfo"`
-
 	// Conditions is an array of current node conditions.
 	Conditions []common.Condition `json:"conditions"`
 
@@ -173,7 +170,7 @@ func getNodeAllocatedResources(node v1.Node, podList *v1.PodList) (NodeAllocated
 	reqs, limits := map[v1.ResourceName]resource.Quantity{}, map[v1.ResourceName]resource.Quantity{}
 
 	for _, p := range podList.Items {
-		podReqs, podLimits, err := pod.PodRequestsAndLimits(&p)
+		podReqs, podLimits, err := pod.RequestsAndLimits(&p)
 		if err != nil {
 			return NodeAllocatedResources{}, err
 		}
@@ -211,7 +208,7 @@ func getNodeAllocatedResources(node v1.Node, podList *v1.PodList) (NodeAllocated
 	}
 
 	var podFraction float64 = 0
-	var podCapacity int64 = node.Status.Capacity.Pods().Value()
+	var podCapacity = node.Status.Capacity.Pods().Value()
 	if podCapacity > 0 {
 		podFraction = float64(len(podList.Items)) / float64(podCapacity) * 100
 	}
@@ -285,13 +282,13 @@ func toNodeDetail(node v1.Node, pods *pod.PodList, eventList *common.EventList,
 			TypeMeta:           types.NewTypeMeta(types.ResourceKindNode),
 			Ready:              getNodeConditionStatus(node, v1.NodeReady),
 			AllocatedResources: allocatedResources,
+			NodeInfo:           node.Status.NodeInfo,
 		},
 		// TODO: Remove deprecated field
 		Phase:           node.Status.Phase,
 		ProviderID:      node.Spec.ProviderID,
 		PodCIDR:         node.Spec.PodCIDR,
 		Unschedulable:   node.Spec.Unschedulable,
-		NodeInfo:        node.Status.NodeInfo,
 		Conditions:      getNodeConditions(node),
 		ContainerImages: getContainerImages(node),
 		PodList:         *pods,

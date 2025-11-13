@@ -19,9 +19,9 @@ schema {
 
 directive @dictionary(subgraph: String) on FIELD_DEFINITION
 
-directive @httpOperation(subgraph: String, path: String, operationSpecificHeaders: ObjMap, httpMethod: HTTPMethod, isBinary: Boolean, requestBaseBody: ObjMap, queryParamArgMap: ObjMap, queryStringOptionsByParam: ObjMap, jsonApiFields: Boolean) on FIELD_DEFINITION
+directive @httpOperation(subgraph: String, path: String, operationSpecificHeaders: [[String]], httpMethod: HTTPMethod, isBinary: Boolean, requestBaseBody: ObjMap, queryParamArgMap: ObjMap, queryStringOptionsByParam: ObjMap, jsonApiFields: Boolean, queryStringOptions: ObjMap) on FIELD_DEFINITION
 
-directive @transport(subgraph: String, kind: String, location: String, headers: ObjMap, queryStringOptions: ObjMap, queryParams: ObjMap) on OBJECT
+directive @transport(subgraph: String, kind: String, location: String, headers: [[String]], queryStringOptions: ObjMap, queryParams: [[String]]) repeatable on SCHEMA
 
 type Query {
   """returns unstructured resource from a namespace"""
@@ -46,7 +46,7 @@ type Query {
     aggregations: String
     """namespace of the resource"""
     namespace: String!
-  ): unstructured_Unstructured @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/name/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/namespace/{args.namespace}/name/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): unstructured_Unstructured @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/name/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/namespace/{args.namespace}/name/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of available protocols for the service"""
   handleGetAvailableProtocols(
     """
@@ -63,7 +63,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): deployment_Protocols @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/protocols", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_Protocols @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/protocols", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ClusterRoles"""
   handleGetClusterRoleList(
     """
@@ -80,7 +80,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): clusterrole_ClusterRoleList @httpOperation(subgraph: "api", path: "/api/v1/clusterrole", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): clusterrole_ClusterRoleList @httpOperation(subgraph: "api", path: "/api/v1/clusterrole", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about ClusterRole"""
   handleGetClusterRoleDetail(
     """name of the ClusterRole"""
@@ -99,7 +99,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): clusterrole_ClusterRoleDetail @httpOperation(subgraph: "api", path: "/api/v1/clusterrole/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): clusterrole_ClusterRoleDetail @httpOperation(subgraph: "api", path: "/api/v1/clusterrole/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ClusterRoleBindings"""
   handleGetClusterRoleBindingList(
     """
@@ -116,7 +116,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): clusterrolebinding_ClusterRoleBindingList @httpOperation(subgraph: "api", path: "/api/v1/clusterrolebinding", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): clusterrolebinding_ClusterRoleBindingList @httpOperation(subgraph: "api", path: "/api/v1/clusterrolebinding", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about ClusterRoleBinding"""
   handleGetClusterRoleBindingDetail(
     """name of the ClusterRoleBinding"""
@@ -135,7 +135,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): clusterrolebinding_ClusterRoleBindingDetail @httpOperation(subgraph: "api", path: "/api/v1/clusterrolebinding/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): clusterrolebinding_ClusterRoleBindingDetail @httpOperation(subgraph: "api", path: "/api/v1/clusterrolebinding/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ConfigMaps in a namespaces"""
   handleGetConfigMapList(
     """
@@ -154,7 +154,7 @@ type Query {
     aggregations: String
     """namespace of the ConfigMap"""
     namespace: String!
-  ): configmap_ConfigMapList @httpOperation(subgraph: "api", path: "/api/v1/configmap", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/configmap/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): configmap_ConfigMapList @httpOperation(subgraph: "api", path: "/api/v1/configmap", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/configmap/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about ConfigMap"""
   handleGetConfigMapDetail(
     """namespace of the ConfigMap"""
@@ -175,7 +175,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): configmap_ConfigMapDetail @httpOperation(subgraph: "api", path: "/api/v1/configmap/{args.namespace}/{args.configmap}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): configmap_ConfigMapDetail @httpOperation(subgraph: "api", path: "/api/v1/configmap/{args.namespace}/{args.configmap}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of CustomResourceDefinition"""
   handleGetCustomResourceDefinitionList(
     """
@@ -192,7 +192,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): types_CustomResourceDefinitionList @httpOperation(subgraph: "api", path: "/api/v1/crd", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): types_CustomResourceDefinitionList @httpOperation(subgraph: "api", path: "/api/v1/crd", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about CustomResourceDefinition"""
   handleGetCustomResourceDefinitionDetail(
     """name of the CustomResourceDefinition"""
@@ -211,7 +211,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): types_CustomResourceDefinitionDetail @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.crd}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): types_CustomResourceDefinitionDetail @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.crd}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of objects of CustomResourceDefinition"""
   handleGetCustomResourceObjectList(
     """namespace of the custom resource"""
@@ -232,7 +232,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): types_CustomResourceObjectList @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.namespace}/{args.crd}/object", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): types_CustomResourceObjectList @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.namespace}/{args.crd}/object", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about custom resource object"""
   handleGetCustomResourceObjectDetail(
     """namespace of the custom resource"""
@@ -255,7 +255,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): types_CustomResourceObjectDetail @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.namespace}/{args.crd}/{args.object}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): types_CustomResourceObjectDetail @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.namespace}/{args.crd}/{args.object}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns Events for custom resource object"""
   handleGetCustomResourceObjectEvents(
     """namespace of the custom resource"""
@@ -278,7 +278,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.namespace}/{args.crd}/{args.object}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/crd/{args.namespace}/{args.crd}/{args.object}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of CronJobs in a namespaces"""
   handleGetCronJobList(
     """
@@ -297,7 +297,7 @@ type Query {
     aggregations: String
     """namespace of the CronJob"""
     namespace: String!
-  ): cronjob_CronJobList @httpOperation(subgraph: "api", path: "/api/v1/cronjob", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): cronjob_CronJobList @httpOperation(subgraph: "api", path: "/api/v1/cronjob", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about CronJob"""
   handleGetCronJobDetail(
     """namespace of the CronJob"""
@@ -318,7 +318,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): cronjob_CronJobDetail @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): cronjob_CronJobDetail @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for CronJob"""
   handleGetCronJobEvents(
     """namespace of the CronJob"""
@@ -339,7 +339,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Jobs for CronJob"""
   handleGetCronJobJobs(
     """namespace of the CronJob"""
@@ -362,7 +362,7 @@ type Query {
     aggregations: String
     """filter related Jobs by active status"""
     active: String
-  ): job_JobList @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}/job", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"active\":\"active\"}")
+  ): job_JobList @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}/job", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"active\":\"active\"}")
   """generates a one-time CSRF token that can be used by POST request"""
   handleGetCsrfToken(
     """action name to generate CSRF token for"""
@@ -381,7 +381,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): csrf_Response @httpOperation(subgraph: "api", path: "/api/v1/csrftoken/{args.action}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): csrf_Response @httpOperation(subgraph: "api", path: "/api/v1/csrftoken/{args.action}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of DaemonSets in a namespaces"""
   handleGetDaemonSetList(
     """
@@ -400,7 +400,7 @@ type Query {
     aggregations: String
     """namespace of the DaemonSet"""
     namespace: String!
-  ): daemonset_DaemonSetList @httpOperation(subgraph: "api", path: "/api/v1/daemonset", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): daemonset_DaemonSetList @httpOperation(subgraph: "api", path: "/api/v1/daemonset", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about DaemonSet"""
   handleGetDaemonSetDetail(
     """namespace of the DaemonSet"""
@@ -421,7 +421,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): daemonset_DaemonSetDetail @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): daemonset_DaemonSetDetail @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for DaemonSet"""
   handleGetDaemonSetEvents(
     """namespace of the DaemonSet"""
@@ -442,7 +442,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods for DaemonSet"""
   handleGetDaemonSetPods(
     """namespace of the DaemonSet"""
@@ -463,7 +463,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Services for DaemonSet"""
   handleGetDaemonSetServices(
     """namespace of the DaemonSet"""
@@ -484,7 +484,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/service", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/service", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Deployments in a namespaces"""
   handleGetDeployments(
     """
@@ -503,7 +503,7 @@ type Query {
     aggregations: String
     """namespace of the Deployment"""
     namespace: String!
-  ): deployment_DeploymentList @httpOperation(subgraph: "api", path: "/api/v1/deployment", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_DeploymentList @httpOperation(subgraph: "api", path: "/api/v1/deployment", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Deployment"""
   handleGetDeploymentDetail(
     """namespace of the Deployment"""
@@ -524,7 +524,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): deployment_DeploymentDetail @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_DeploymentDetail @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Deployment"""
   handleGetDeploymentEvents(
     """namespace of the Deployment"""
@@ -545,7 +545,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of new ReplicaSets for Deployment"""
   handleGetDeploymentNewReplicaSet(
     """namespace of the Deployment"""
@@ -566,7 +566,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): replicaset_ReplicaSet @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/newreplicaset", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): replicaset_ReplicaSet @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/newreplicaset", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of old ReplicaSets for Deployment"""
   handleGetDeploymentOldReplicaSets(
     """namespace of the Deployment"""
@@ -587,7 +587,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): replicaset_ReplicaSetList @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/oldreplicaset", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): replicaset_ReplicaSetList @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/oldreplicaset", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events in a namespace"""
   handleGetEventList(
     """
@@ -606,7 +606,7 @@ type Query {
     aggregations: String
     """namespace to get Events from"""
     namespace: String!
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/event/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/event/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of HorizontalPodAutoscalers in a namespaces"""
   handleGetHorizontalPodAutoscalerList(
     """
@@ -625,7 +625,7 @@ type Query {
     aggregations: String
     """namespace of the HorizontalPodAutoscaler"""
     namespace: String!
-  ): horizontalpodautoscaler_HorizontalPodAutoscalerList @httpOperation(subgraph: "api", path: "/api/v1/horizontalpodautoscaler", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/horizontalpodautoscaler/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): horizontalpodautoscaler_HorizontalPodAutoscalerList @httpOperation(subgraph: "api", path: "/api/v1/horizontalpodautoscaler", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/horizontalpodautoscaler/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about HorizontalPodAutoscaler"""
   handleGetHorizontalPodAutoscalerDetail(
     """namespace of the HorizontalPodAutoscaler"""
@@ -646,7 +646,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): horizontalpodautoscaler_HorizontalPodAutoscalerDetail @httpOperation(subgraph: "api", path: "/api/v1/horizontalpodautoscaler/{args.namespace}/{args.horizontalpodautoscaler}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): horizontalpodautoscaler_HorizontalPodAutoscalerDetail @httpOperation(subgraph: "api", path: "/api/v1/horizontalpodautoscaler/{args.namespace}/{args.horizontalpodautoscaler}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Ingresses in a namespaces"""
   handleGetIngressList(
     """
@@ -665,7 +665,7 @@ type Query {
     aggregations: String
     """namespace of the Ingress"""
     namespace: String!
-  ): ingress_IngressList @httpOperation(subgraph: "api", path: "/api/v1/ingress", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/ingress/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): ingress_IngressList @httpOperation(subgraph: "api", path: "/api/v1/ingress", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/ingress/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Ingress"""
   handleGetIngressEvent(
     """namespace of the Ingress"""
@@ -686,7 +686,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/ingress/{args.namespace}/{args.ingress}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/ingress/{args.namespace}/{args.ingress}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Ingress"""
   handleGetIngressDetail(
     """namespace of the Ingress"""
@@ -707,7 +707,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): ingress_IngressDetail @httpOperation(subgraph: "api", path: "/api/v1/ingress/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): ingress_IngressDetail @httpOperation(subgraph: "api", path: "/api/v1/ingress/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of IngressClasses"""
   handleGetIngressClassList(
     """
@@ -724,7 +724,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): ingressclass_IngressClassList @httpOperation(subgraph: "api", path: "/api/v1/ingressclass", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): ingressclass_IngressClassList @httpOperation(subgraph: "api", path: "/api/v1/ingressclass", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about IngressClass"""
   handleGetIngressClass(
     """name of the IngressClass"""
@@ -743,7 +743,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): ingressclass_IngressClass @httpOperation(subgraph: "api", path: "/api/v1/ingressclass/{args.ingressclass}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): ingressclass_IngressClass @httpOperation(subgraph: "api", path: "/api/v1/ingressclass/{args.ingressclass}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   handleGetState(
     """
     Comma delimited string used to apply filtering: 'propertyName,filterValue'
@@ -759,7 +759,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/integration/{name}/state", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/integration/{name}/state", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Jobs in a namespaces"""
   handleGetJobList(
     """
@@ -778,7 +778,7 @@ type Query {
     aggregations: String
     """namespace of the Job"""
     namespace: String!
-  ): job_JobList @httpOperation(subgraph: "api", path: "/api/v1/job", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): job_JobList @httpOperation(subgraph: "api", path: "/api/v1/job", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Job"""
   handleGetJobDetail(
     """namespace of the Job"""
@@ -799,7 +799,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): job_JobDetail @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): job_JobDetail @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Job"""
   handleGetJobEvents(
     """namespace of the Job"""
@@ -820,7 +820,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}/{args.name}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}/{args.name}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods for Job"""
   handleGetJobPods(
     """namespace of the Job"""
@@ -841,7 +841,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}/{args.name}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/job/{args.namespace}/{args.name}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a text file with logs from a Container"""
   handleLogFile(
     """namespace of the Pod"""
@@ -864,7 +864,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): [Int] @httpOperation(subgraph: "api", path: "/api/v1/log/file/{args.namespace}/{args.pod}/{args.container}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): [Int] @httpOperation(subgraph: "api", path: "/api/v1/log/file/{args.namespace}/{args.pod}/{args.container}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns log sources for a resource"""
   handleLogSource(
     """namespace of the resource"""
@@ -887,7 +887,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): controller_LogSources @httpOperation(subgraph: "api", path: "/api/v1/log/source/{args.namespace}/{args.resourceName}/{args.resourceType}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): controller_LogSources @httpOperation(subgraph: "api", path: "/api/v1/log/source/{args.namespace}/{args.resourceName}/{args.resourceType}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns logs from a Container"""
   handleLogs(
     """namespace of the Pod"""
@@ -910,7 +910,7 @@ type Query {
     aggregations: String
     """name of container in the Pod"""
     container: String!
-  ): logs_LogDetails @httpOperation(subgraph: "api", path: "/api/v1/log/{args.namespace}/{args.pod}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/log/{args.namespace}/{args.pod}/{args.container}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): logs_LogDetails @httpOperation(subgraph: "api", path: "/api/v1/log/{args.namespace}/{args.pod}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/log/{args.namespace}/{args.pod}/{args.container}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Namespaces"""
   handleGetNamespaces(
     """
@@ -927,7 +927,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): namespace_NamespaceList @httpOperation(subgraph: "api", path: "/api/v1/namespace", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): namespace_NamespaceList @httpOperation(subgraph: "api", path: "/api/v1/namespace", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Namespace"""
   handleGetNamespaceDetail(
     """name of the Namespace"""
@@ -946,7 +946,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): namespace_NamespaceDetail @httpOperation(subgraph: "api", path: "/api/v1/namespace/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): namespace_NamespaceDetail @httpOperation(subgraph: "api", path: "/api/v1/namespace/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Namespace"""
   handleGetNamespaceEvents(
     """name of the Namespace"""
@@ -965,7 +965,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/namespace/{args.name}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/namespace/{args.name}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of NetworkPolicies in a namespaces"""
   handleGetNetworkPolicyList(
     """
@@ -984,7 +984,7 @@ type Query {
     aggregations: String
     """namespace of the NetworkPolicy"""
     namespace: String!
-  ): networkpolicy_NetworkPolicyList @httpOperation(subgraph: "api", path: "/api/v1/networkpolicy", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/networkpolicy/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): networkpolicy_NetworkPolicyList @httpOperation(subgraph: "api", path: "/api/v1/networkpolicy", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/networkpolicy/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about NetworkPolicy"""
   handleGetNetworkPolicyDetail(
     """namespace of the NetworkPolicy"""
@@ -1005,7 +1005,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): networkpolicy_NetworkPolicyDetail @httpOperation(subgraph: "api", path: "/api/v1/networkpolicy/{args.namespace}/{args.networkpolicy}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): networkpolicy_NetworkPolicyDetail @httpOperation(subgraph: "api", path: "/api/v1/networkpolicy/{args.namespace}/{args.networkpolicy}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Nodes"""
   handleGetNodeList(
     """
@@ -1022,7 +1022,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): node_NodeList @httpOperation(subgraph: "api", path: "/api/v1/node", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): node_NodeList @httpOperation(subgraph: "api", path: "/api/v1/node", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Node"""
   handleGetNodeDetail(
     """name of the Node"""
@@ -1041,7 +1041,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): node_NodeDetail @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): node_NodeDetail @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Node"""
   handleGetNodeEvents(
     """name of the Node"""
@@ -1060,7 +1060,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods for Node"""
   handleGetNodePods(
     """name of the Node"""
@@ -1079,7 +1079,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of PersistentVolumes from all namespaces"""
   handleGetPersistentVolumeList(
     """
@@ -1096,7 +1096,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): persistentvolume_PersistentVolumeList @httpOperation(subgraph: "api", path: "/api/v1/persistentvolume", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): persistentvolume_PersistentVolumeList @httpOperation(subgraph: "api", path: "/api/v1/persistentvolume", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about PersistentVolume"""
   handleGetPersistentVolumeDetail(
     """name of the PersistentVolume"""
@@ -1115,7 +1115,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): persistentvolume_PersistentVolumeDetail @httpOperation(subgraph: "api", path: "/api/v1/persistentvolume/namespace/{namespace}/name/{args.persistentvolume}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/persistentvolume/{args.persistentvolume}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): persistentvolume_PersistentVolumeDetail @httpOperation(subgraph: "api", path: "/api/v1/persistentvolume/namespace/{namespace}/name/{args.persistentvolume}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/persistentvolume/{args.persistentvolume}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of PersistentVolumeClaim from specified namespace"""
   handleGetPersistentVolumeClaimList(
     """
@@ -1134,7 +1134,7 @@ type Query {
     aggregations: String
     """namespace of the PersistentVolumeClaim"""
     namespace: String!
-  ): persistentvolumeclaim_PersistentVolumeClaimList @httpOperation(subgraph: "api", path: "/api/v1/persistentvolumeclaim", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/persistentvolumeclaim/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): persistentvolumeclaim_PersistentVolumeClaimList @httpOperation(subgraph: "api", path: "/api/v1/persistentvolumeclaim", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/persistentvolumeclaim/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about PersistentVolumeClaim"""
   handleGetPersistentVolumeClaimDetail(
     """namespace of the PersistentVolumeClaim"""
@@ -1155,7 +1155,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): persistentvolumeclaim_PersistentVolumeClaimDetail @httpOperation(subgraph: "api", path: "/api/v1/persistentvolumeclaim/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): persistentvolumeclaim_PersistentVolumeClaimDetail @httpOperation(subgraph: "api", path: "/api/v1/persistentvolumeclaim/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods in a namespaces"""
   handleGetPods(
     """
@@ -1174,7 +1174,7 @@ type Query {
     aggregations: String
     """namespace of the Pod"""
     namespace: String!
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Pod"""
   handleGetPodDetail(
     """namespace of the Pod"""
@@ -1195,7 +1195,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodDetail @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodDetail @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of containers for Pod"""
   handleGetPodContainers(
     """namespace of the Pod"""
@@ -1216,7 +1216,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodDetail @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/container", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodDetail @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/container", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Pod"""
   handleGetPodEvents(
     """namespace of the Pod"""
@@ -1237,7 +1237,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of containers for Pod"""
   handleGetPodPersistentVolumeClaims(
     """namespace of the Pod"""
@@ -1258,7 +1258,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): persistentvolumeclaim_PersistentVolumeClaimList @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/persistentvolumeclaim", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): persistentvolumeclaim_PersistentVolumeClaimList @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/persistentvolumeclaim", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """handles exec into pod"""
   handleExecShell(
     """namespace of the Pod"""
@@ -1281,7 +1281,47 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): handler_TerminalResponse @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/shell/{args.container}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): handler_TerminalResponse @httpOperation(subgraph: "api", path: "/api/v1/pod/{args.namespace}/{args.pod}/shell/{args.container}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  """returns a list of PodDisruptionBudget from specified namespace"""
+  handleGetPodDisruptionBudgetList(
+    """
+    Comma delimited string used to apply filtering: 'propertyName,filterValue'
+    """
+    filterBy: String
+    """Name of the column to sort by"""
+    sortBy: String
+    """Number of items to return when pagination is applied"""
+    itemsPerPage: String
+    """Page number to return items from"""
+    page: String
+    """Metric names to download"""
+    metricNames: String
+    """Aggregations to be performed for each metric (default: sum)"""
+    aggregations: String
+    """namespace of the PodDisruptionBudget"""
+    namespace: String!
+  ): poddisruptionbudget_PodDisruptionBudgetList @httpOperation(subgraph: "api", path: "/api/v1/poddisruptionbudget", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/poddisruptionbudget/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  """returns detailed information about PodDisruptionBudget"""
+  handleGetPodDisruptionBudgetDetail(
+    """namespace of the PodDisruptionBudget"""
+    namespace: String!
+    """name of the PodDisruptionBudget"""
+    name: String!
+    """
+    Comma delimited string used to apply filtering: 'propertyName,filterValue'
+    """
+    filterBy: String
+    """Name of the column to sort by"""
+    sortBy: String
+    """Number of items to return when pagination is applied"""
+    itemsPerPage: String
+    """Page number to return items from"""
+    page: String
+    """Metric names to download"""
+    metricNames: String
+    """Aggregations to be performed for each metric (default: sum)"""
+    aggregations: String
+  ): poddisruptionbudget_PodDisruptionBudgetDetail @httpOperation(subgraph: "api", path: "/api/v1/poddisruptionbudget/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ReplicaSets in a namespace"""
   handleGetReplicaSets(
     """
@@ -1300,7 +1340,7 @@ type Query {
     aggregations: String
     """namespace of the ReplicaSets"""
     namespace: String!
-  ): replicaset_ReplicaSetList @httpOperation(subgraph: "api", path: "/api/v1/replicaset", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): replicaset_ReplicaSetList @httpOperation(subgraph: "api", path: "/api/v1/replicaset", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about ReplicaSet"""
   handleGetReplicaSetDetail(
     """namespace of the ReplicaSet"""
@@ -1321,7 +1361,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): replicaset_ReplicaSetDetail @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): replicaset_ReplicaSetDetail @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for ReplicaSet"""
   handleGetReplicaSetEvents(
     """namespace of the ReplicaSet"""
@@ -1342,7 +1382,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods for ReplicaSet"""
   handleGetReplicaSetPods(
     """namespace of the ReplicaSet"""
@@ -1363,7 +1403,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Services for ReplicaSet"""
   handleGetReplicaSetServices(
     """namespace of the ReplicaSet"""
@@ -1384,7 +1424,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}/service", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/replicaset/{args.namespace}/{args.replicaSet}/service", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ReplicationController in a namespace"""
   handleGetReplicationControllerList(
     """
@@ -1403,7 +1443,7 @@ type Query {
     aggregations: String
     """namespace to get a list of ReplicationController from"""
     namespace: String!
-  ): replicationcontroller_ReplicationControllerList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): replicationcontroller_ReplicationControllerList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about ReplicationController"""
   handleGetReplicationControllerDetail(
     """namespace of the ReplicationController"""
@@ -1424,7 +1464,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): replicationcontroller_ReplicationControllerDetail @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): replicationcontroller_ReplicationControllerDetail @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for ReplicationController"""
   handleGetReplicationControllerEvents(
     """namespace of the ReplicationController"""
@@ -1445,7 +1485,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods for ReplicationController"""
   handleGetReplicationControllerPods(
     """namespace of the ReplicationController"""
@@ -1466,7 +1506,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Services for ReplicationController"""
   handleGetReplicationControllerServices(
     """namespace of the ReplicationController"""
@@ -1487,7 +1527,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/service", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/service", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Roles in a namespace"""
   handleGetRoleList(
     """
@@ -1506,7 +1546,7 @@ type Query {
     aggregations: String
     """namespace of the Role"""
     namespace: String!
-  ): role_RoleList @httpOperation(subgraph: "api", path: "/api/v1/role", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/role/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): role_RoleList @httpOperation(subgraph: "api", path: "/api/v1/role", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/role/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Role"""
   handleGetRoleDetail(
     """namespace of the Role"""
@@ -1527,7 +1567,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): role_RoleDetail @httpOperation(subgraph: "api", path: "/api/v1/role/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): role_RoleDetail @httpOperation(subgraph: "api", path: "/api/v1/role/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of RoleBindings in a namespace"""
   handleGetRoleBindingList(
     """
@@ -1546,7 +1586,7 @@ type Query {
     aggregations: String
     """namespace of the RoleBinding"""
     namespace: String!
-  ): rolebinding_RoleBindingList @httpOperation(subgraph: "api", path: "/api/v1/rolebinding", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/rolebinding/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): rolebinding_RoleBindingList @httpOperation(subgraph: "api", path: "/api/v1/rolebinding", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/rolebinding/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about RoleBinding"""
   handleGetRoleBindingDetail(
     """namespace of the RoleBinding"""
@@ -1567,7 +1607,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): rolebinding_RoleBindingDetail @httpOperation(subgraph: "api", path: "/api/v1/rolebinding/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): rolebinding_RoleBindingDetail @httpOperation(subgraph: "api", path: "/api/v1/rolebinding/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a number of replicas of non-namespaced resource"""
   handleGetReplicaCount(
     """kind of the resource"""
@@ -1590,7 +1630,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): scaling_ReplicaCounts @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): scaling_ReplicaCounts @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Secrets in a namespace"""
   handleGetSecretList(
     """
@@ -1609,7 +1649,7 @@ type Query {
     aggregations: String
     """namespace of the Secret"""
     namespace: String!
-  ): secret_SecretList @httpOperation(subgraph: "api", path: "/api/v1/secret", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/secret/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): secret_SecretList @httpOperation(subgraph: "api", path: "/api/v1/secret", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/secret/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Secret"""
   handleGetSecretDetail(
     """namespace of the Secret"""
@@ -1630,7 +1670,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): secret_SecretDetail @httpOperation(subgraph: "api", path: "/api/v1/secret/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): secret_SecretDetail @httpOperation(subgraph: "api", path: "/api/v1/secret/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Services in a namespace"""
   handleGetServiceList(
     """
@@ -1649,7 +1689,7 @@ type Query {
     aggregations: String
     """namespace of the Service"""
     namespace: String!
-  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/service", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): service_ServiceList @httpOperation(subgraph: "api", path: "/api/v1/service", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about Service"""
   handleGetServiceDetail(
     """namespace of the Service"""
@@ -1670,7 +1710,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): service_ServiceDetail @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): service_ServiceDetail @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for Service"""
   handleGetServiceEvent(
     """namespace of the Service"""
@@ -1691,7 +1731,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Ingresses for Service"""
   handleGetServiceIngressList(
     """namespace of the Service"""
@@ -1712,7 +1752,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): ingress_IngressList @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}/ingress", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): ingress_IngressList @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}/ingress", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Pods for Service"""
   handleGetServicePods(
     """namespace of the Service"""
@@ -1733,7 +1773,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/service/{args.namespace}/{args.service}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ServiceAccounts in a namespaces"""
   handleGetServiceAccountList(
     """
@@ -1752,7 +1792,7 @@ type Query {
     aggregations: String
     """namespace of the ServiceAccount"""
     namespace: String!
-  ): serviceaccount_ServiceAccountList @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): serviceaccount_ServiceAccountList @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about ServiceAccount"""
   handleGetServiceAccountDetail(
     """namespace of the ServiceAccount"""
@@ -1773,7 +1813,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): serviceaccount_ServiceAccountDetail @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}/{args.serviceaccount}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): serviceaccount_ServiceAccountDetail @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}/{args.serviceaccount}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of ImagePullSecret Secrets for ServiceAccount"""
   handleGetServiceAccountImagePullSecrets(
     """namespace of the ServiceAccount"""
@@ -1794,7 +1834,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): secret_SecretList @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}/{args.serviceaccount}/imagepullsecret", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): secret_SecretList @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}/{args.serviceaccount}/imagepullsecret", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Secrets for ServiceAccount"""
   handleGetServiceAccountSecrets(
     """namespace of the ServiceAccount"""
@@ -1815,7 +1855,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): secret_SecretList @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}/{args.serviceaccount}/secret", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): secret_SecretList @httpOperation(subgraph: "api", path: "/api/v1/serviceaccount/{args.namespace}/{args.serviceaccount}/secret", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of StatefulSets in a namespaces"""
   handleGetStatefulSetList(
     """
@@ -1834,7 +1874,7 @@ type Query {
     aggregations: String
     """namespace of the StatefulSet"""
     namespace: String!
-  ): statefulset_StatefulSetList @httpOperation(subgraph: "api", path: "/api/v1/statefulset", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): statefulset_StatefulSetList @httpOperation(subgraph: "api", path: "/api/v1/statefulset", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about StatefulSets"""
   handleGetStatefulSetDetail(
     """namespace of the StatefulSet"""
@@ -1855,7 +1895,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): statefulset_StatefulSetDetail @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): statefulset_StatefulSetDetail @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of Events for StatefulSets"""
   handleGetStatefulSetEvents(
     """namespace of the StatefulSet"""
@@ -1876,7 +1916,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}/event", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): common_EventList @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}/event", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns  a list of Pods for StatefulSets"""
   handleGetStatefulSetPods(
     """namespace of the StatefulSet"""
@@ -1897,7 +1937,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): pod_PodList @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of StorageClasses"""
   handleGetStorageClassList(
     """
@@ -1914,7 +1954,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): storageclass_StorageClassList @httpOperation(subgraph: "api", path: "/api/v1/storageclass", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): storageclass_StorageClassList @httpOperation(subgraph: "api", path: "/api/v1/storageclass", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns detailed information about StorageClass"""
   handleGetStorageClass(
     """name of the StorageClass"""
@@ -1933,7 +1973,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): storageclass_StorageClass @httpOperation(subgraph: "api", path: "/api/v1/storageclass/{args.storageclass}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): storageclass_StorageClass @httpOperation(subgraph: "api", path: "/api/v1/storageclass/{args.storageclass}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of PersistentVolumes assigned to StorageClass"""
   handleGetStorageClassPersistentVolumes(
     """name of the StorageClass"""
@@ -1952,7 +1992,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): persistentvolume_PersistentVolumeList @httpOperation(subgraph: "api", path: "/api/v1/storageclass/{args.storageclass}/persistentvolume", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): persistentvolume_PersistentVolumeList @httpOperation(subgraph: "api", path: "/api/v1/storageclass/{args.storageclass}/persistentvolume", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """returns a list of HorizontalPodAutoscalers for resource"""
   handleGetHorizontalPodAutoscalerListForResource(
     """kind of the resource to get HorizontalPodAutoscalers for"""
@@ -1975,7 +2015,7 @@ type Query {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): horizontalpodautoscaler_HorizontalPodAutoscalerList @httpOperation(subgraph: "api", path: "/api/v1/{args.kind}/{args.namespace}/{args.name}/horizontalpodautoscaler", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): horizontalpodautoscaler_HorizontalPodAutoscalerList @httpOperation(subgraph: "api", path: "/api/v1/{args.kind}/{args.namespace}/{args.name}/horizontalpodautoscaler", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: GET, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
 }
 
 type unstructured_Unstructured {
@@ -2008,6 +2048,7 @@ type types_ObjectMeta {
   labels: JSON
   name: String
   namespace: String
+  ownerReferences: [types_OwnerReference]
   uid: String
 }
 
@@ -2019,6 +2060,11 @@ type v1_Time {
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+type types_OwnerReference {
+  kind: String!
+  name: String!
+}
 
 type types_TypeMeta {
   kind: String
@@ -2417,8 +2463,15 @@ type pod_Pod {
 type pod_PodAllocatedResources {
   cpuLimits: BigInt!
   cpuRequests: BigInt!
+  gpuLimits: [pod_GPUAllocation]!
+  gpuRequests: [pod_GPUAllocation]!
   memoryLimits: BigInt!
   memoryRequests: BigInt!
+}
+
+type pod_GPUAllocation {
+  quantity: BigInt!
+  type: String!
 }
 
 type pod_ContainerStatus {
@@ -2653,7 +2706,7 @@ type v1_IngressRule {
   	  Currently the port of an Ingress is implicitly :80 for http and
   	  :443 for https.
   Both these may change in the future. Incoming requests are matched against the host before the IngressRuleValue. If the host is unspecified, the Ingress routes all traffic based on the specified IngressRuleValue.
-  
+
   host can be "precise" which is a domain name without the terminating dot of a network host (e.g. "foo.bar.com") or "wildcard", which is a domain name prefixed with a single wildcard label (e.g. "*.foo.com"). The wildcard character '*' must appear by itself as the first DNS label and matches only a single label. You cannot have a wildcard label by itself (e.g. Host == "*"). Requests will be matched against the Host field in the following way: 1. If host is precise, the request matches this rule if the http host header is equal to Host. 2. If host is a wildcard, then the request matches this rule if the http host header is to equal to the suffix (removing the first label) of the wildcard rule.
   """
   host: String
@@ -2962,6 +3015,7 @@ type node_NodeList {
 
 type node_Node {
   allocatedResources: node_NodeAllocatedResources!
+  nodeInfo: v1_NodeSystemInfo!
   objectMeta: types_ObjectMeta!
   ready: String!
   typeMeta: types_TypeMeta!
@@ -2981,6 +3035,40 @@ type node_NodeAllocatedResources {
   memoryRequestsFraction: Float!
   podCapacity: BigInt!
   podFraction: Float!
+}
+
+"""NodeSystemInfo is a set of ids/uuids to uniquely identify the node."""
+type v1_NodeSystemInfo {
+  """The Architecture reported by the node"""
+  architecture: String!
+  """Boot ID reported by the node."""
+  bootID: String!
+  """
+  ContainerRuntime Version reported by the node through runtime remote API (e.g. containerd://1.4.2).
+  """
+  containerRuntimeVersion: String!
+  """
+  Kernel Version reported by the node from 'uname -r' (e.g. 3.16.0-0.bpo.4-amd64).
+  """
+  kernelVersion: String!
+  """Deprecated: KubeProxy Version reported by the node."""
+  kubeProxyVersion: String!
+  """Kubelet Version reported by the node."""
+  kubeletVersion: String!
+  """
+  MachineID reported by the node. For unique machine identification in the cluster this field is preferred. Learn more from man(5) machine-id: http://man7.org/linux/man-pages/man5/machine-id.5.html
+  """
+  machineID: String!
+  """The Operating System reported by the node"""
+  operatingSystem: String!
+  """
+  OS Image reported by the node from /etc/os-release (e.g. Debian GNU/Linux 7 (wheezy)).
+  """
+  osImage: String!
+  """
+  SystemUUID reported by the node. For unique machine identification MachineID is preferred. This field is specific to Red Hat hosts https://access.redhat.com/documentation/en-us/red_hat_subscription_management/1/html/rhsm/uuid
+  """
+  systemUUID: String!
 }
 
 type node_NodeDetail {
@@ -3009,40 +3097,6 @@ type v1_NodeAddress {
   address: String!
   """Node address type, one of Hostname, ExternalIP or InternalIP."""
   type: String!
-}
-
-"""NodeSystemInfo is a set of ids/uuids to uniquely identify the node."""
-type v1_NodeSystemInfo {
-  """The Architecture reported by the node"""
-  architecture: String!
-  """Boot ID reported by the node."""
-  bootID: String!
-  """
-  ContainerRuntime Version reported by the node through runtime remote API (e.g. containerd://1.4.2).
-  """
-  containerRuntimeVersion: String!
-  """
-  Kernel Version reported by the node from 'uname -r' (e.g. 3.16.0-0.bpo.4-amd64).
-  """
-  kernelVersion: String!
-  """KubeProxy Version reported by the node."""
-  kubeProxyVersion: String!
-  """Kubelet Version reported by the node."""
-  kubeletVersion: String!
-  """
-  MachineID reported by the node. For unique machine identification in the cluster this field is preferred. Learn more from man(5) machine-id: http://man7.org/linux/man-pages/man5/machine-id.5.html
-  """
-  machineID: String!
-  """The Operating System reported by the node"""
-  operatingSystem: String!
-  """
-  OS Image reported by the node from /etc/os-release (e.g. Debian GNU/Linux 7 (wheezy)).
-  """
-  osImage: String!
-  """
-  SystemUUID reported by the node. For unique machine identification MachineID is preferred. This field is specific to Red Hat hosts https://access.redhat.com/documentation/en-us/red_hat_subscription_management/1/html/rhsm/uuid
-  """
-  systemUUID: String!
 }
 
 """
@@ -3299,9 +3353,7 @@ type v1_CinderPersistentVolumeSource {
   volumeID: String!
 }
 
-"""
-Represents storage that is managed by an external CSI volume driver (Beta feature)
-"""
+"""Represents storage that is managed by an external CSI volume driver"""
 type v1_CSIPersistentVolumeSource {
   controllerExpandSecretRef: v1_SecretReference
   controllerPublishSecretRef: v1_SecretReference
@@ -3484,9 +3536,7 @@ type v1_ISCSIPersistentVolumeSource {
   targetPortal: String!
 }
 
-"""
-Local represents directly-attached storage with node affinity (Beta feature)
-"""
+"""Local represents directly-attached storage with node affinity"""
 type v1_LocalVolumeSource {
   """
   fsType is the filesystem type to mount. It applies only when the Path is a block device. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". The default value is to auto-select a filesystem if unspecified.
@@ -3912,6 +3962,7 @@ type v1_ExecAction {
   command: [String]
 }
 
+"""GRPCAction specifies an action involving a GRPC service."""
 type v1_GRPCAction {
   """
   Port number of the gRPC service. Number must be in the range 1 to 65535.
@@ -3919,7 +3970,7 @@ type v1_GRPCAction {
   port: Int!
   """
   Service is the name of the service to place in the gRPC HealthCheckRequest (see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).
-  
+
   If this is not specified, the default behavior is defined by gRPC.
   """
   service: String!
@@ -3961,9 +4012,9 @@ type v1_TCPSocketAction {
 type v1_ResourceRequirements {
   """
   Claims lists the names of resources, defined in spec.resourceClaims, that are used by this container.
-  
+
   This is an alpha field and requires enabling the DynamicResourceAllocation feature gate.
-  
+
   This field is immutable. It can only be set for containers.
   """
   claims: [v1_ResourceClaim]
@@ -3977,6 +4028,10 @@ type v1_ResourceClaim {
   Name must match the name of one entry in pod.spec.resourceClaims of the Pod where this field is used. It makes that resource available inside a container.
   """
   name: String!
+  """
+  Request is the name chosen for a request in the referenced claim. If empty, everything from the claim is made available, otherwise only the result of this request.
+  """
+  request: String
 }
 
 """
@@ -4032,7 +4087,7 @@ type v1_SecurityContext {
   """
   privileged: Boolean
   """
-  procMount denotes the type of proc mount to use for the containers. The default is DefaultProcMount which uses the container runtime defaults for readonly paths and masked paths. This requires the ProcMountType feature flag to be enabled. Note that this field cannot be set when spec.os.name is windows.
+  procMount denotes the type of proc mount to use for the containers. The default value is Default which uses the container runtime defaults for readonly paths and masked paths. This requires the ProcMountType feature flag to be enabled. Note that this field cannot be set when spec.os.name is windows.
   """
   procMount: String
   """
@@ -4101,7 +4156,7 @@ type v1_SeccompProfile {
   localhostProfile: String
   """
   type indicates which kind of seccomp profile will be applied. Valid options are:
-  
+
   Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied.
   """
   type: String!
@@ -4133,6 +4188,10 @@ ContainerStatus contains details for the current status of this container.
 type v1_ContainerStatus {
   allocatedResources: ObjMap!
   """
+  AllocatedResourcesStatus represents the status of various resources allocated for this Pod.
+  """
+  allocatedResourcesStatus: [v1_ResourceStatus]
+  """
   ContainerID is the ID of the container in the format '<type>://<container_id>'. Where type is a container runtime identifier, returned from Version call of CRI API (for example "containerd").
   """
   containerID: String
@@ -4151,7 +4210,7 @@ type v1_ContainerStatus {
   name: String!
   """
   Ready specifies whether the container is currently passing its readiness check. The value will change as readiness probes keep executing. If no readiness probes are specified, this field defaults to true once the container is fully started (see Started field).
-  
+
   The value is typically used to determine whether a container is ready to accept traffic.
   """
   ready: Boolean!
@@ -4165,6 +4224,7 @@ type v1_ContainerStatus {
   """
   started: Boolean
   state: v1_ContainerState
+  user: v1_ContainerUser
   """Status of volume mounts."""
   volumeMounts: [v1_VolumeMountStatus]
 }
@@ -4186,6 +4246,42 @@ type resource_Quantity8 {
   d: resource_infDecAmount!
   i: resource_int64Amount!
   s: String!
+}
+
+"""
+ResourceStatus represents the status of a single resource allocated to a Pod.
+"""
+type v1_ResourceStatus {
+  """
+  Name of the resource. Must be unique within the pod and in case of non-DRA resource, match one of the resources from the pod spec. For DRA resources, the value must be "claim:<claim_name>/<request>". When this status is reported about a container, the "claim_name" and "request" must match one of the claims of this container.
+  """
+  name: String!
+  """
+  List of unique resources health. Each element in the list contains an unique resource ID and its health. At a minimum, for the lifetime of a Pod, resource ID must uniquely identify the resource allocated to the Pod on the Node. If other Pod on the same Node reports the status with the same resource ID, it must be the same resource they share. See ResourceID type definition for a specific format it has in various use cases.
+  """
+  resources: [v1_ResourceHealth]
+}
+
+"""
+ResourceHealth represents the health of a resource. It has the latest device health information. This is a part of KEP https://kep.k8s.io/4680.
+"""
+type v1_ResourceHealth {
+  """
+  Health of the resource. can be one of:
+   - Healthy: operates as normal
+   - Unhealthy: reported unhealthy. We consider this a temporary health issue
+                since we do not have a mechanism today to distinguish
+                temporary and permanent issues.
+   - Unknown: The status cannot be determined.
+              For example, Device Plugin got unregistered and hasn't been re-registered since.
+
+  In future we may want to introduce the PermanentlyUnhealthy Status.
+  """
+  health: String
+  """
+  ResourceID is the unique identifier of the resource. See the ResourceID type for more information.
+  """
+  resourceID: String!
 }
 
 """
@@ -4224,6 +4320,29 @@ type v1_ContainerStateWaiting {
   message: String
   """(brief) reason the container is not yet running."""
   reason: String
+}
+
+"""ContainerUser represents user identity information"""
+type v1_ContainerUser {
+  linux: v1_LinuxContainerUser
+}
+
+"""
+LinuxContainerUser represents user identity information in Linux containers
+"""
+type v1_LinuxContainerUser {
+  """
+  GID is the primary gid initially attached to the first process in the container
+  """
+  gid: BigInt!
+  """
+  SupplementalGroups are the supplemental groups initially attached to the first process in the container
+  """
+  supplementalGroups: [BigInt]
+  """
+  UID is the primary uid initially attached to the first process in the container
+  """
+  uid: BigInt!
 }
 
 """VolumeMountStatus shows status of volume mounts."""
@@ -4269,6 +4388,7 @@ type v1_Volume {
   gitRepo: v1_GitRepoVolumeSource
   glusterfs: v1_GlusterfsVolumeSource
   hostPath: v1_HostPathVolumeSource
+  image: v1_ImageVolumeSource
   iscsi: v1_ISCSIVolumeSource
   """
   name of the volume. Must be a DNS_LABEL and unique within the pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
@@ -4492,9 +4612,9 @@ type v1_ObjectMeta {
   finalizers: [String]
   """
   GenerateName is an optional prefix, used by the server, to generate a unique name ONLY IF the Name field has not been provided. If this field is used, the name returned to the client will be different than the name passed. This value will also be combined with a unique suffix. The provided value has the same validation rules as the Name field, and may be truncated by the length of the suffix required to make the value unique on the server.
-  
+
   If this field is specified and the generated name exists, the server will return a 409.
-  
+
   Applied only if Name is not specified. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#idempotency
   """
   generateName: String
@@ -4516,7 +4636,7 @@ type v1_ObjectMeta {
   name: String
   """
   Namespace defines the space within which each name must be unique. An empty namespace is equivalent to the "default" namespace, but "default" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.
-  
+
   Must be a DNS_LABEL. Cannot be updated. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces
   """
   namespace: String
@@ -4526,7 +4646,7 @@ type v1_ObjectMeta {
   ownerReferences: [v1_OwnerReference]
   """
   An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.
-  
+
   Populated by the system. Read-only. Value must be treated as opaque by clients and . More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
   """
   resourceVersion: String
@@ -4536,7 +4656,7 @@ type v1_ObjectMeta {
   selfLink: String
   """
   UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.
-  
+
   Populated by the system. Read-only. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names#uids
   """
   uid: String
@@ -4556,9 +4676,9 @@ type v1_ManagedFieldsEntry {
   fieldsType: String
   """
   FieldsV1 stores a set of fields in a data structure like a Trie, in JSON format.
-  
+
   Each key is either a '.' representing the field itself, and will always map to an empty set, or a string representing a sub-field or item. The string will follow one of these four formats: 'f:<name>', where <name> is the name of a field in a struct, or key in a map 'v:<value>', where <value> is the exact json formatted value of a list item 'i:<index>', where <index> is position of a item in a list 'k:<keys>', where <keys> is a map of  a list item's key fields to their unique values If a key maps to an empty Fields value, the field that key represents is part of the set.
-  
+
   The exact format is defined in sigs.k8s.io/structured-merge-diff
   """
   fieldsV1: JSON
@@ -4618,7 +4738,7 @@ type v1_PersistentVolumeClaimSpec {
   """
   storageClassName: String
   """
-  volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/ (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled.
+  volumeAttributesClassName may be used to set the VolumeAttributesClass used by this claim. If specified, the CSI driver will create or update the volume with the attributes defined in the corresponding VolumeAttributesClass. This has a different purpose than storageClassName, it can be changed after the claim is created. An empty string value means that no VolumeAttributesClass will be applied to the claim but it's not allowed to reset this field to empty string once it is set. If unspecified and the PersistentVolumeClaim is unbound, the default VolumeAttributesClass will be set by the persistentvolume controller if it exists. If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource exists. More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/ (Beta) Using this field requires the VolumeAttributesClass feature gate to be enabled (off by default).
   """
   volumeAttributesClassName: String
   """
@@ -4631,6 +4751,9 @@ type v1_PersistentVolumeClaimSpec {
   volumeName: String
 }
 
+"""
+TypedObjectReference contains enough information to let you locate the typed referenced object
+"""
 type v1_TypedObjectReference {
   """
   APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
@@ -4745,6 +4868,18 @@ type v1_GlusterfsVolumeSource {
   readOnly: Boolean
 }
 
+"""ImageVolumeSource represents a image volume resource."""
+type v1_ImageVolumeSource {
+  """
+  Policy for pulling OCI objects. Possible values are: Always: the kubelet always attempts to pull the reference. Container creation will fail If the pull fails. Never: the kubelet never pulls the reference and only uses a local image or artifact. Container creation will fail if the reference isn't present. IfNotPresent: the kubelet pulls if the reference isn't already present on disk. Container creation will fail if the reference isn't present and the pull fails. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
+  """
+  pullPolicy: String
+  """
+  Required: Image or artifact reference to be used. Behaves in the same way as pod.spec.containers[*].image. Pull secrets will be assembled in the same way as for the container image by looking up node credentials, SA image pull secrets, and pod spec image pull secrets. More info: https://kubernetes.io/docs/concepts/containers/images This field is optional to allow higher level config management to default or override container images in workload controllers like Deployments and StatefulSets.
+  """
+  reference: String
+}
+
 """
 Represents an ISCSI disk. ISCSI volumes can only be mounted as read/write once. ISCSI volumes support ownership management and SELinux relabeling.
 """
@@ -4808,12 +4943,14 @@ type v1_ProjectedVolumeSource {
   defaultMode are the mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set.
   """
   defaultMode: Int
-  """sources is the list of volume projections"""
+  """
+  sources is the list of volume projections. Each entry in this list handles one source.
+  """
   sources: [v1_VolumeProjection]!
 }
 
 """
-Projection that may be projected along with other supported volume types
+Projection that may be projected along with other supported volume types. Exactly one of these fields must be set.
 """
 type v1_VolumeProjection {
   clusterTrustBundle: v1_ClusterTrustBundleProjection
@@ -5036,7 +5173,7 @@ type v1_PodSecurityContext {
   appArmorProfile: v1_AppArmorProfile
   """
   A special supplemental group that applies to all containers in a pod. Some volume types allow the Kubelet to change the ownership of that volume to be owned by the pod:
-  
+
   1. The owning GID will be the FSGroup 2. The setgid bit is set (new files created in the volume will be owned by FSGroup) 3. The permission bits are OR'd with rw-rw
   """
   fsGroup: BigInt
@@ -5056,12 +5193,30 @@ type v1_PodSecurityContext {
   The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container. Note that this field cannot be set when spec.os.name is windows.
   """
   runAsUser: BigInt
+  """
+  seLinuxChangePolicy defines how the container's SELinux label is applied to all volumes used by the Pod. It has no effect on nodes that do not support SELinux or to volumes does not support SELinux. Valid values are "MountOption" and "Recursive".
+
+  "Recursive" means relabeling of all files on all Pod volumes by the container runtime. This may be slow for large volumes, but allows mixing privileged and unprivileged Pods sharing the same volume on the same node.
+
+  "MountOption" mounts all eligible Pod volumes with `-o context` mount option. This requires all Pods that share the same volume to use the same SELinux label. It is not possible to share the same volume among privileged and unprivileged Pods. Eligible volumes are in-tree FibreChannel and iSCSI volumes, and all CSI volumes whose CSI driver announces SELinux support by setting spec.seLinuxMount: true in their CSIDriver instance. Other volumes are always re-labelled recursively. "MountOption" value is allowed only when SELinuxMount feature gate is enabled.
+
+  If not specified and SELinuxMount feature gate is enabled, "MountOption" is used. If not specified and SELinuxMount feature gate is disabled, "MountOption" is used for ReadWriteOncePod volumes and "Recursive" for all other volumes.
+
+  This field affects only Pods that have SELinux label set, either in PodSecurityContext or in SecurityContext of all containers.
+
+  All Pods that use the same volume should use the same seLinuxChangePolicy, otherwise some pods can get stuck in ContainerCreating state. Note that this field cannot be set when spec.os.name is windows.
+  """
+  seLinuxChangePolicy: String
   seLinuxOptions: v1_SELinuxOptions
   seccompProfile: v1_SeccompProfile
   """
-  A list of groups applied to the first process run in each container, in addition to the container's primary GID, the fsGroup (if specified), and group memberships defined in the container image for the uid of the container process. If unspecified, no additional groups are added to any container. Note that group memberships defined in the container image for the uid of the container process are still effective, even if they are not included in this list. Note that this field cannot be set when spec.os.name is windows.
+  A list of groups applied to the first process run in each container, in addition to the container's primary GID and fsGroup (if specified).  If the SupplementalGroupsPolicy feature is enabled, the supplementalGroupsPolicy field determines whether these are in addition to or instead of any group memberships defined in the container image. If unspecified, no additional groups are added, though group memberships defined in the container image may still be used, depending on the supplementalGroupsPolicy field. Note that this field cannot be set when spec.os.name is windows.
   """
   supplementalGroups: [BigInt]
+  """
+  Defines how supplemental groups of the first container processes are calculated. Valid values are "Merge" and "Strict". If not specified, "Merge" is used. (Alpha) Using the field requires the SupplementalGroupsPolicy feature gate to be enabled and the container runtime must implement support for this feature. Note that this field cannot be set when spec.os.name is windows.
+  """
+  supplementalGroupsPolicy: String
   """
   Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported sysctls (by the container runtime) might fail to launch. Note that this field cannot be set when spec.os.name is windows.
   """
@@ -5079,6 +5234,39 @@ type v1_Sysctl {
 
 type handler_TerminalResponse {
   id: String!
+}
+
+type poddisruptionbudget_PodDisruptionBudgetList {
+  errors: [JSON]!
+  items: [poddisruptionbudget_PodDisruptionBudget]!
+  listMeta: types_ListMeta!
+}
+
+type poddisruptionbudget_PodDisruptionBudget {
+  currentHealthy: Int!
+  desiredHealthy: Int!
+  disruptionsAllowed: Int!
+  expectedPods: Int!
+  labelSelector: v1_LabelSelector
+  maxUnavailable: String!
+  minAvailable: String!
+  objectMeta: types_ObjectMeta!
+  typeMeta: types_TypeMeta!
+  unhealthyPodEvictionPolicy: String!
+}
+
+type poddisruptionbudget_PodDisruptionBudgetDetail {
+  currentHealthy: Int!
+  desiredHealthy: Int!
+  disruptedPods: JSON!
+  disruptionsAllowed: Int!
+  expectedPods: Int!
+  labelSelector: v1_LabelSelector
+  maxUnavailable: String!
+  minAvailable: String!
+  objectMeta: types_ObjectMeta!
+  typeMeta: types_TypeMeta!
+  unhealthyPodEvictionPolicy: String!
 }
 
 type replicaset_ReplicaSetDetail {
@@ -5210,14 +5398,14 @@ type endpoint_Endpoint {
 type v1_EndpointPort {
   """
   The application protocol for this port. This is used as a hint for implementations to offer richer behavior for protocols that they understand. This field follows standard Kubernetes label syntax. Valid values are either:
-  
+
   * Un-prefixed protocol names - reserved for IANA standard service names (as per RFC-6335 and https://www.iana.org/assignments/service-names).
-  
+
   * Kubernetes-defined prefixed names:
     * 'kubernetes.io/h2c' - HTTP/2 prior knowledge over cleartext as described in https://www.rfc-editor.org/rfc/rfc9113.html#name-starting-http-2-with-prior-
     * 'kubernetes.io/ws'  - WebSocket over cleartext as described in https://www.rfc-editor.org/rfc/rfc6455
     * 'kubernetes.io/wss' - WebSocket over TLS as described in https://www.rfc-editor.org/rfc/rfc6455
-  
+
   * Other protocols should use implementation-defined prefixed names such as mycompany.com/my-custom-protocol.
   """
   appProtocol: String
@@ -5312,7 +5500,7 @@ type Mutation {
     input: JSON!
     """namespace of the resource"""
     namespace: String!
-  ): Void @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/name/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/namespace/{args.namespace}/name/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): Void @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/name/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}") @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/namespace/{args.namespace}/name/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """deletes a resource from a namespace"""
   handleDeleteResource(
     """kind of the resource"""
@@ -5339,7 +5527,7 @@ type Mutation {
     propagation: String
     """namespace of the resource"""
     namespace: String!
-  ): Void @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/name/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: DELETE, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"deleteNow\":\"deleteNow\",\"propagation\":\"propagation\"}") @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/namespace/{args.namespace}/name/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: DELETE, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"deleteNow\":\"deleteNow\",\"propagation\":\"propagation\"}")
+  ): Void @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/name/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: DELETE, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"deleteNow\":\"deleteNow\",\"propagation\":\"propagation\"}") @httpOperation(subgraph: "api", path: "/api/v1/_raw/{args.kind}/namespace/{args.namespace}/name/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: DELETE, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"deleteNow\":\"deleteNow\",\"propagation\":\"propagation\"}")
   """creates an application based on provided deployment.AppDeploymentSpec"""
   handleDeploy(
     """
@@ -5357,7 +5545,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: deployment_AppDeploymentSpec_Input!
-  ): deployment_AppDeploymentSpec! @httpOperation(subgraph: "api", path: "/api/v1/appdeployment", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_AppDeploymentSpec! @httpOperation(subgraph: "api", path: "/api/v1/appdeployment", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """checks if provided image is valid"""
   handleImageReferenceValidity(
     """
@@ -5375,7 +5563,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: validation_ImageReferenceValiditySpec_Input!
-  ): validation_ImageReferenceValidity @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/validate/imagereference", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): validation_ImageReferenceValidity @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/validate/imagereference", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """checks if provided name is valid"""
   handleNameValidity(
     """
@@ -5393,7 +5581,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: validation_AppNameValiditySpec_Input!
-  ): validation_AppNameValidity @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/validate/name", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): validation_AppNameValidity @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/validate/name", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """checks if provided service protocol is valid"""
   handleProtocolValidity(
     """
@@ -5411,7 +5599,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: validation_ProtocolValiditySpec_Input!
-  ): validation_ProtocolValidity @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/validate/protocol", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): validation_ProtocolValidity @httpOperation(subgraph: "api", path: "/api/v1/appdeployment/validate/protocol", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """create an application from file"""
   handleDeployFromFile(
     """
@@ -5429,7 +5617,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: deployment_AppDeploymentFromFileSpec_Input!
-  ): deployment_AppDeploymentFromFileResponse @httpOperation(subgraph: "api", path: "/api/v1/appdeploymentfromfile", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_AppDeploymentFromFileResponse @httpOperation(subgraph: "api", path: "/api/v1/appdeploymentfromfile", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """triggers a Job based on CronJob"""
   handleTriggerCronJob(
     """namespace of the CronJob"""
@@ -5450,7 +5638,28 @@ type Mutation {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}/trigger", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/cronjob/{args.namespace}/{args.name}/trigger", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  """rollout restart of the Daemon Set"""
+  handleDaemonSetRestart(
+    """namespace of the Daemon Set"""
+    namespace: String!
+    """name of the Daemon Set"""
+    daemonSet: String!
+    """
+    Comma delimited string used to apply filtering: 'propertyName,filterValue'
+    """
+    filterBy: String
+    """Name of the column to sort by"""
+    sortBy: String
+    """Number of items to return when pagination is applied"""
+    itemsPerPage: String
+    """Page number to return items from"""
+    page: String
+    """Metric names to download"""
+    metricNames: String
+    """Aggregations to be performed for each metric (default: sum)"""
+    aggregations: String
+  ): daemonset_DaemonSetDetail @httpOperation(subgraph: "api", path: "/api/v1/daemonset/{args.namespace}/{args.daemonSet}/restart", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """pauses the Deployment"""
   handleDeploymentPause(
     """namespace of the Deployment"""
@@ -5471,7 +5680,7 @@ type Mutation {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): deployment_DeploymentDetail @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/pause", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_DeploymentDetail @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/pause", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """rollout restart of the Deployment"""
   handleDeploymentRestart(
     """namespace of the Deployment"""
@@ -5492,7 +5701,7 @@ type Mutation {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): deployment_RolloutSpec! @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/restart", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_RolloutSpec! @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/restart", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """resumes the Deployment"""
   handleDeploymentResume(
     """namespace of the Deployment"""
@@ -5513,7 +5722,7 @@ type Mutation {
     metricNames: String
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
-  ): deployment_DeploymentDetail @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/resume", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_DeploymentDetail @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/resume", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """rolls back the Deployment to the target revision"""
   handleDeploymentRollback(
     """namespace of the Deployment"""
@@ -5535,7 +5744,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: deployment_RolloutSpec_Input!
-  ): deployment_RolloutSpec! @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/rollback", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): deployment_RolloutSpec! @httpOperation(subgraph: "api", path: "/api/v1/deployment/{args.namespace}/{args.deployment}/rollback", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """create a Namespace"""
   handleCreateNamespace(
     """
@@ -5553,7 +5762,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: namespace_NamespaceSpec_Input!
-  ): namespace_NamespaceSpec! @httpOperation(subgraph: "api", path: "/api/v1/namespace", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): namespace_NamespaceSpec! @httpOperation(subgraph: "api", path: "/api/v1/namespace", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """drains Node"""
   handleNodeDrain(
     """name of the Node"""
@@ -5573,7 +5782,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: node_NodeDrainSpec_Input!
-  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}/drain", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/node/{args.name}/drain", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """scales ReplicationController to a number of replicas"""
   handleUpdateReplicasCount(
     """namespace of the ReplicationController"""
@@ -5595,7 +5804,7 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: replicationcontroller_ReplicationControllerSpec_Input!
-  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/update/pod", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): JSON @httpOperation(subgraph: "api", path: "/api/v1/replicationcontroller/{args.namespace}/{args.replicationController}/update/pod", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
   """scales a non-namespaced resource"""
   handleScaleResource(
     """kind of the resource"""
@@ -5620,7 +5829,7 @@ type Mutation {
     aggregations: String
     """desired number of replicas"""
     scaleBy: String
-  ): scaling_ReplicaCounts @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.namespace}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"scaleBy\":\"scaleBy\"}") @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.name}", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"scaleBy\":\"scaleBy\"}")
+  ): scaling_ReplicaCounts @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.namespace}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"scaleBy\":\"scaleBy\"}") @httpOperation(subgraph: "api", path: "/api/v1/scale/{args.kind}/{args.name}", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\",\"scaleBy\":\"scaleBy\"}")
   """stores ImagePullSecret in a Kubernetes Secret"""
   handleCreateImagePullSecret(
     """
@@ -5638,7 +5847,28 @@ type Mutation {
     """Aggregations to be performed for each metric (default: sum)"""
     aggregations: String
     input: secret_ImagePullSecretSpec_Input!
-  ): secret_Secret @httpOperation(subgraph: "api", path: "/api/v1/secret", operationSpecificHeaders: "{\"Content-Type\":\"application/json\",\"Accept\":\"application/json\"}", httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  ): secret_Secret @httpOperation(subgraph: "api", path: "/api/v1/secret", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: POST, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
+  """rollout restart of the Daemon Set"""
+  handleStatefulSetRestart(
+    """namespace of the StatefulSet"""
+    namespace: String!
+    """name of the StatefulSet"""
+    statefulset: String!
+    """
+    Comma delimited string used to apply filtering: 'propertyName,filterValue'
+    """
+    filterBy: String
+    """Name of the column to sort by"""
+    sortBy: String
+    """Number of items to return when pagination is applied"""
+    itemsPerPage: String
+    """Page number to return items from"""
+    page: String
+    """Metric names to download"""
+    metricNames: String
+    """Aggregations to be performed for each metric (default: sum)"""
+    aggregations: String
+  ): statefulset_StatefulSetDetail @httpOperation(subgraph: "api", path: "/api/v1/statefulset/{args.namespace}/{args.statefulset}/restart", operationSpecificHeaders: [["Content-Type", "application/json"], ["Accept", "application/json"]], httpMethod: PUT, queryParamArgMap: "{\"filterBy\":\"filterBy\",\"sortBy\":\"sortBy\",\"itemsPerPage\":\"itemsPerPage\",\"page\":\"page\",\"metricNames\":\"metricNames\",\"aggregations\":\"aggregations\"}")
 }
 
 """Represents empty values"""
@@ -5812,8 +6042,6 @@ input secret_ImagePullSecretSpec_Input {
   namespace: String!
 }
 
-scalar ObjMap
-
 enum HTTPMethod {
   GET
   HEAD
@@ -5825,6 +6053,8 @@ enum HTTPMethod {
   TRACE
   PATCH
 }
+
+scalar ObjMap
 
 enum ContainerState {
   Waiting
